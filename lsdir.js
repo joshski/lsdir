@@ -1,28 +1,18 @@
 var fs = require('fs');
 var _ = require('underscore');
 
-var getDirectories = function (receiveDirectories) {
-    var dirs = [];
-    var n = 0;
-
+var withEachDirectory = function (callback) {
     fs.readdir('.', function (err, files) {
         _(files).each(function (file) {
-            n++;
             fs.stat(file, function (err, fileStat) {
                 if (fileStat.isDirectory()) {
-                    dirs.push(file);
-                }
-                n--;
-                if (n==0) {
-                    receiveDirectories(dirs);
+                    callback(file);
                 }
             });
         });
     });
 }
 
-getDirectories(function (dirs) {
-    _(dirs).each(function (dir) {
-        console.log(dir);
-    });
+withEachDirectory(function (dir) {
+    console.log(dir);
 });
